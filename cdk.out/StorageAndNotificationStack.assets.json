@@ -1,0 +1,19 @@
+{
+  "version": "38.0.1",
+  "files": {
+    "d8c824ba7255ceec0992082efa45f5af177ac94868beb9b6e60e463d4e53e80a": {
+      "source": {
+        "path": "StorageAndNotificationStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "d8c824ba7255ceec0992082efa45f5af177ac94868beb9b6e60e463d4e53e80a.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

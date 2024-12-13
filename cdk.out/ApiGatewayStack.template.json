@@ -1,0 +1,540 @@
+{
+ "Resources": {
+  "PlottingApi7CA4E44C": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "API Gateway to trigger the Plotting Lambda.",
+    "Name": "Plotting Service"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApiGatewayStack/PlottingApi/Resource"
+   }
+  },
+  "PlottingApiDeploymentB1AB2FA267f9024fb4cae060c39893b844586a1e": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "API Gateway to trigger the Plotting Lambda.",
+    "RestApiId": {
+     "Ref": "PlottingApi7CA4E44C"
+    }
+   },
+   "DependsOn": [
+    "PlottingApiplotPOSTCCFAFC92",
+    "PlottingApiplotB5540623"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "ApiGatewayStack/PlottingApi/Deployment/Resource"
+   }
+  },
+  "PlottingApiDeploymentStageprod0540CEA9": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "PlottingApiDeploymentB1AB2FA267f9024fb4cae060c39893b844586a1e"
+    },
+    "RestApiId": {
+     "Ref": "PlottingApi7CA4E44C"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApiGatewayStack/PlottingApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "PlottingApiplotB5540623": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "PlottingApi7CA4E44C",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "plot",
+    "RestApiId": {
+     "Ref": "PlottingApi7CA4E44C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApiGatewayStack/PlottingApi/Default/plot/Resource"
+   }
+  },
+  "PlottingApiplotPOSTApiPermissionApiGatewayStackPlottingApi1EBCDB26POSTplot9D2CF90C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::ImportValue": "PlottingLambdaStack:ExportsOutputFnGetAttPlottingLambdaE0AD2309ArnC64FE1D2"
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PlottingApi7CA4E44C"
+       },
+       "/",
+       {
+        "Ref": "PlottingApiDeploymentStageprod0540CEA9"
+       },
+       "/POST/plot"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApiGatewayStack/PlottingApi/Default/plot/POST/ApiPermission.ApiGatewayStackPlottingApi1EBCDB26.POST..plot"
+   }
+  },
+  "PlottingApiplotPOSTApiPermissionTestApiGatewayStackPlottingApi1EBCDB26POSTplot059412D5": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::ImportValue": "PlottingLambdaStack:ExportsOutputFnGetAttPlottingLambdaE0AD2309ArnC64FE1D2"
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "PlottingApi7CA4E44C"
+       },
+       "/test-invoke-stage/POST/plot"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApiGatewayStack/PlottingApi/Default/plot/POST/ApiPermission.Test.ApiGatewayStackPlottingApi1EBCDB26.POST..plot"
+   }
+  },
+  "PlottingApiplotPOSTCCFAFC92": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "POST",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::ImportValue": "PlottingLambdaStack:ExportsOutputFnGetAttPlottingLambdaE0AD2309ArnC64FE1D2"
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "PlottingApiplotB5540623"
+    },
+    "RestApiId": {
+     "Ref": "PlottingApi7CA4E44C"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApiGatewayStack/PlottingApi/Default/plot/POST/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WMQQ6CMBBFz8IeqmgkbhW3RgIHMAMMMAItodMQQri7qdWoq3n/5f/ZiTA6iK0Hkw6Ksg06ysWSMRStD5O+LzBQDYwTzGJJUfNpID+u5AcvOHRq7lGytT8pY6jROgcpamXGAs+gv+H9yPEVuVGlVY5Wv4M+L0HElUxw7ElrUnK1hZvhwfDfOq5krGRJ/OokMzdKbvbiKMLIe2iiYDSSqUeRuvsEiuubvPcAAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApiGatewayStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "PlottingApiEndpoint9B251261": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "PlottingApi7CA4E44C"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "PlottingApiDeploymentStageprod0540CEA9"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "PlottingApiId": {
+   "Value": {
+    "Ref": "PlottingApi7CA4E44C"
+   }
+  },
+  "ExportsOutputRefPlottingApi7CA4E44C65AA2BE7": {
+   "Value": {
+    "Ref": "PlottingApi7CA4E44C"
+   },
+   "Export": {
+    "Name": "ApiGatewayStack:ExportsOutputRefPlottingApi7CA4E44C65AA2BE7"
+   }
+  },
+  "ExportsOutputRefPlottingApiDeploymentStageprod0540CEA9DC6A8FCE": {
+   "Value": {
+    "Ref": "PlottingApiDeploymentStageprod0540CEA9"
+   },
+   "Export": {
+    "Name": "ApiGatewayStack:ExportsOutputRefPlottingApiDeploymentStageprod0540CEA9DC6A8FCE"
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-3"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-4"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Equals": [
+      {
+       "Ref": "AWS::Region"
+      },
+      "us-west-2"
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
